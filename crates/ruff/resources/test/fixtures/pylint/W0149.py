@@ -1,6 +1,6 @@
 """Check for `while` loops.
 
-W0149 should produce three warnings when checking this file.
+W0149 should produce four warnings when checking this file.
 """
 
 while True:

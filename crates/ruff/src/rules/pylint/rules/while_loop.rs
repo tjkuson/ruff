@@ -1,7 +1,9 @@
-use rustpython_parser::ast::{Ranged, Stmt};
+use crate::checkers::ast::Checker;
+use rustpython_parser::ast::Stmt;
 
 use ruff_diagnostics::{Diagnostic, Violation};
 use ruff_macros::{derive_message_formats, violation};
+use ruff_python_ast::helpers;
 
 /// ## What it does
 /// Checks for `while` loops.
@@ -42,9 +44,11 @@ impl Violation for WhileLoop {
 }
 
 /// W0149
-pub(crate) fn while_loop(stmt: &Stmt) -> Option<Diagnostic> {
-    match stmt {
-        Stmt::While(_) => Some(Diagnostic::new(WhileLoop, stmt.range())),
-        _ => None,
+pub(crate) fn while_loop(checker: &mut Checker, stmt: &Stmt) {
+    if let Stmt::While(_) = stmt {
+        checker.diagnostics.push(Diagnostic::new(
+            WhileLoop,
+            helpers::identifier_range(stmt, checker.locator),
+        ));
     }
 }
