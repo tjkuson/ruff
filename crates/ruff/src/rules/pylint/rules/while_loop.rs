@@ -9,12 +9,12 @@ use ruff_python_ast::helpers;
 /// Checks for `while` loops.
 ///
 /// ## Why is this bad?
-/// `while` loops are hard to read and understand. They are also prone to
+/// `while` loops can hard to read and understand. They are also prone to
 /// infinite loops.
 ///
-/// Often, code can be rewritten to use an alternative construct, such as
-/// `for` loops and context managers. Exceptions to this rule are loops that
-/// are intended to run indefinitely, such as event loops and listeners.
+/// Often, a `while` loop can be rewritten as an alternative construct, such as
+/// a `for` loop or context manager. Exceptions to are loops that are intended
+/// to run indefinitely, such as event loops and listeners.
 ///
 /// ## Example
 /// ```python
