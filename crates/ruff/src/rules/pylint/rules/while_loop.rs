@@ -16,7 +16,7 @@ use ruff_python_ast::helpers;
 /// a `for` loop or context manager. These are often more explicit, less error
 /// prone, and more easily optimized by the interpreter.
 ///
-/// Exceptions to are loops that are intended to run indefinitely, such as
+/// Exceptions to this are loops that are intended to run indefinitely, such as
 /// event loops and listeners.
 ///
 /// ## Example
