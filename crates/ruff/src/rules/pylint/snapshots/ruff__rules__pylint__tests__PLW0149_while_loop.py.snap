@@ -1,0 +1,49 @@
+---
+source: crates/ruff/src/rules/pylint/mod.rs
+---
+while_loop.py:6:1: PLW0149 Used `while` loop
+   |
+ 6 |   """
+ 7 |   
+ 8 | / while True:
+ 9 | |     print("Do something")
+10 | |     break
+   | |_________^ PLW0149
+11 |   
+12 |   while False:
+   |
+
+while_loop.py:10:1: PLW0149 Used `while` loop
+   |
+10 |       break
+11 |   
+12 | / while False:
+13 | |     print("Do something")
+14 | |     break
+   | |_________^ PLW0149
+15 |   
+16 |   i = 3
+   |
+
+while_loop.py:15:1: PLW0149 Used `while` loop
+   |
+15 |   i = 3
+16 | / while i > 0:
+17 | |     print(i)
+18 | |     i -= 1
+   | |__________^ PLW0149
+19 |   
+20 |   while (j := i) > 0:
+   |
+
+while_loop.py:19:1: PLW0149 Used `while` loop
+   |
+19 |       i -= 1
+20 |   
+21 | / while (j := i) > 0:
+22 | |     print(j)
+23 | |     i -= 1
+   | |__________^ PLW0149
+   |
+
+
