@@ -5,7 +5,8 @@ use rustpython_parser::ast::{Alias, Ranged, Stmt};
 use crate::checkers::ast::Checker;
 
 /// ## What it does
-/// Checks for import statements that import a private name.
+/// Checks for import statements that import a private name (a name starting
+/// with an underscore `_`).
 ///
 /// ## Why is this bad?
 /// [PEP 8] states that names starting with an underscore are private. Thus,
@@ -17,6 +18,11 @@ use crate::checkers::ast::Checker;
 ///
 /// Instead, consider using the public API of the module.
 ///
+/// ## Known problems
+/// Does not ignore private name imports from within the module that defines
+/// the private name if the module is defined with [PEP 420] namespace packages
+/// (directories that omit the `__init__.py` file).
+///
 /// ## Example
 /// ```python
 /// from foo import _bar
@@ -27,6 +33,8 @@ use crate::checkers::ast::Checker;
 /// - [Semantic Versioning](https://semver.org/)
 ///
 /// [PEP 8]: https://www.python.org/dev/peps/pep-0008/
+/// [PEP 420]: https://www.python.org/dev/peps/pep-0420/
+/// [`namespace-packages`]: https://beta.ruff.rs/docs/settings/#namespace-packages
 #[violation]
 pub struct ImportPrivateName {
     name: String,
@@ -58,6 +66,7 @@ pub(crate) fn import_private_name(
             return;
         }
         // Ignore private imports from the same module.
+        // TODO(tjkuson): Make this work with PEP 420 namespace packages.
         if let Some(module_path) = module_path {
             let root_module = module_path.first().unwrap();
             if module.starts_with(root_module) {
@@ -76,16 +85,18 @@ pub(crate) fn import_private_name(
                 stmt.range(),
             ));
         }
-        for name in names {
-            if matches!(name.name.as_str(), "__version__" | "_") {
+        for n in names {
+            // It is common to import the package version as `__version__` and
+            // to name translation functions `_`. Ignore these names.
+            if matches!(n.name.as_str(), "__version__" | "_") {
                 continue;
             }
-            if name.name.starts_with('_') {
+            if n.name.starts_with('_') {
                 checker.diagnostics.push(Diagnostic::new(
                     ImportPrivateName {
-                        name: name.name.to_string(),
+                        name: n.name.to_string(),
                     },
-                    name.range(),
+                    n.range(),
                 ));
             }
         }
