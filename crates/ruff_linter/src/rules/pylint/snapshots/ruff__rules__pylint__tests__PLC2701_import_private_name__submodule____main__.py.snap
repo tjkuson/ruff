@@ -10,7 +10,7 @@ __main__.py:2:1: PLC2701 Imported private name `_foo`
 4 | from _foo.bar import baz
   |
 
-__main__.py:3:1: PLC2701 Imported private name `_bar`
+__main__.py:3:1: PLC2701 Imported private name `_bar` from external module `foo`
   |
 1 | # Errors.
 2 | from _foo import bar
@@ -30,7 +30,7 @@ __main__.py:4:1: PLC2701 Imported private name `_foo`
 6 | from foo import _bar as bar
   |
 
-__main__.py:5:17: PLC2701 Imported private name `_bar`
+__main__.py:5:17: PLC2701 Imported private name `_bar` from external module `foo`
   |
 3 | from foo._bar import baz
 4 | from _foo.bar import baz
@@ -39,7 +39,7 @@ __main__.py:5:17: PLC2701 Imported private name `_bar`
 6 | from foo import _bar as bar
   |
 
-__main__.py:6:17: PLC2701 Imported private name `_bar`
+__main__.py:6:17: PLC2701 Imported private name `_bar` from external module `foo`
   |
 4 | from _foo.bar import baz
 5 | from foo import _bar

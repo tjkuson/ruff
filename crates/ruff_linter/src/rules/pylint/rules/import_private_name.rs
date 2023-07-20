@@ -6,7 +6,7 @@ use crate::checkers::ast::Checker;
 
 /// ## What it does
 /// Checks for import statements that import a private name (a name starting
-/// with an underscore `_`).
+/// with an underscore `_`) from another module.
 ///
 /// ## Why is this bad?
 /// [PEP 8] states that names starting with an underscore are private. Thus,
@@ -21,12 +21,16 @@ use crate::checkers::ast::Checker;
 /// ## Known problems
 /// Does not ignore private name imports from within the module that defines
 /// the private name if the module is defined with [PEP 420] namespace packages
-/// (directories that omit the `__init__.py` file).
+/// (directories that omit the `__init__.py` file). Instead, namespace packages
+/// must be made known to ruff using the [`namespace-packages`] setting.
 ///
 /// ## Example
 /// ```python
 /// from foo import _bar
 /// ```
+///
+/// ## Options
+/// - [`namespace-packages`]: List of namespace packages that are known to
 ///
 /// ## References
 /// - [PEP 8: Naming Conventions](https://peps.python.org/pep-0008/#naming-conventions)
@@ -38,13 +42,19 @@ use crate::checkers::ast::Checker;
 #[violation]
 pub struct ImportPrivateName {
     name: String,
+    module: Option<String>,
 }
 
 impl Violation for ImportPrivateName {
     #[derive_message_formats]
     fn message(&self) -> String {
-        let ImportPrivateName { name } = self;
-        format!("Imported private name `{name}`")
+        let ImportPrivateName { name, module } = self;
+        match module {
+            Some(module) => {
+                format!("Imported private name `{name}` from external module `{module}`",)
+            }
+            None => format!("Imported private name `{name}`", name = name),
+        }
     }
 }
 
@@ -78,25 +88,35 @@ pub(crate) fn import_private_name(
                 .split('.')
                 .find(|name| name.starts_with('_'))
                 .unwrap_or(module);
+            let external_module = Some(
+                module
+                    .split('.')
+                    .take_while(|name| !name.starts_with('_'))
+                    .collect::<Vec<_>>()
+                    .join("."),
+            )
+            .filter(|module| !module.is_empty());
             checker.diagnostics.push(Diagnostic::new(
                 ImportPrivateName {
                     name: private_name.to_string(),
+                    module: external_module,
                 },
                 stmt.range(),
             ));
         }
-        for n in names {
+        for name in names {
             // It is common to import the package version as `__version__` and
             // to name translation functions `_`. Ignore these names.
-            if matches!(n.name.as_str(), "__version__" | "_") {
+            if matches!(name.name.as_str(), "__version__" | "_") {
                 continue;
             }
-            if n.name.starts_with('_') {
+            if name.name.starts_with('_') {
                 checker.diagnostics.push(Diagnostic::new(
                     ImportPrivateName {
-                        name: n.name.to_string(),
+                        name: name.name.to_string(),
+                        module: Some(module.to_string()),
                     },
-                    n.range(),
+                    name.range(),
                 ));
             }
         }
