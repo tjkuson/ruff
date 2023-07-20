@@ -1,6 +1,6 @@
-use rustpython_parser::ast::{Alias, Ranged, Stmt};
 use ruff_diagnostics::{Diagnostic, Violation};
 use ruff_macros::{derive_message_formats, violation};
+use rustpython_parser::ast::{Alias, Ranged, Stmt};
 
 use crate::checkers::ast::Checker;
 
