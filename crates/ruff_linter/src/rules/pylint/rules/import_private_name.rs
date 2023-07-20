@@ -47,6 +47,7 @@ pub(crate) fn import_private_name(
     names: &[Alias],
     module: Option<&str>,
     level: Option<u32>,
+    module_path: Option<&[String]>,
 ) {
     // Relative imports are not a public API, so we don't need to check them.
     if level.map_or(false, |level| level > 0) {
@@ -55,6 +56,13 @@ pub(crate) fn import_private_name(
     if let Some(module) = module {
         if module.starts_with("__future__") || module.starts_with("__main__") {
             return;
+        }
+        // Ignore private imports from the same module.
+        if let Some(module_path) = module_path {
+            let root_module = module_path.first().unwrap();
+            if module.starts_with(root_module) {
+                return;
+            }
         }
         if module.starts_with('_') || module.contains("._") {
             let private_name = module

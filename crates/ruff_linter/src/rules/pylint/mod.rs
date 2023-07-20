@@ -61,8 +61,15 @@ mod tests {
         Rule::GlobalVariableNotAssigned,
         Path::new("global_variable_not_assigned.py")
     )]
+<<<<<<< HEAD:crates/ruff_linter/src/rules/pylint/mod.rs
     #[test_case(Rule::ImportOutsideTopLevel, Path::new("import_outside_top_level.py"))]
     #[test_case(Rule::ImportPrivateName, Path::new("import_private_name.py"))]
+=======
+    #[test_case(
+        Rule::ImportPrivateName,
+        Path::new("import_private_name/submodule/__main__.py")
+    )]
+>>>>>>> 382eaf0ab (Check for importing from own module):crates/ruff/src/rules/pylint/mod.rs
     #[test_case(Rule::ImportSelf, Path::new("import_self/module.py"))]
     #[test_case(Rule::InvalidAllFormat, Path::new("invalid_all_format.py"))]
     #[test_case(Rule::InvalidAllObject, Path::new("invalid_all_object.py"))]
