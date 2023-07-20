@@ -743,6 +743,9 @@ pub(crate) fn statement(stmt: &Stmt, checker: &mut Checker) {
             if checker.enabled(Rule::DeprecatedImport) {
                 pyupgrade::rules::deprecated_import(checker, stmt, names, module, level);
             }
+            if self.enabled(Rule::ImportPrivateName) {
+                    pylint::rules::import_private_name(self, stmt, names, module, level);
+                }
             if checker.enabled(Rule::UnnecessaryBuiltinImport) {
                 if let Some(module) = module {
                     pyupgrade::rules::unnecessary_builtin_import(checker, stmt, module, names);
