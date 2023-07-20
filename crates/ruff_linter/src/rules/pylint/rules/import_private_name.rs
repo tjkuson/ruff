@@ -53,7 +53,7 @@ pub(crate) fn import_private_name(
         return;
     }
     if let Some(module) = module {
-        if module.starts_with("__future__") {
+        if module.starts_with("__future__") || module.starts_with("__main__") {
             return;
         }
         if module.starts_with('_') || module.contains("._") {
@@ -69,6 +69,9 @@ pub(crate) fn import_private_name(
             ));
         }
         for name in names {
+            if name.name.as_str() == "__version__" {
+                continue;
+            }
             if name.name.starts_with('_') {
                 checker.diagnostics.push(Diagnostic::new(
                     ImportPrivateName {

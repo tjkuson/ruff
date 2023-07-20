@@ -14,5 +14,7 @@ from foo.bar import baz
 from foo.bar import baz as _baz
 from .foo import _bar  # Relative import.
 from .foo._bar import baz  # Relative import.
-from .foo.bar import baz  # Relative import.
-from __future__ import annotations  # Future is a special case.
+from ._foo.bar import baz  # Relative import.
+from __future__ import annotations  # __future__ is a special case.
+from __main__ import main  # __main__ is a special case.
+from foo import __version__  # __version__ is a special case.
