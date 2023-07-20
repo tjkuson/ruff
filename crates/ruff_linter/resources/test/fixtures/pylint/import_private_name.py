@@ -18,8 +18,14 @@ from ._foo.bar import baz  # Relative import.
 from __future__ import annotations  # __future__ is a special case.
 from __main__ import main  # __main__ is a special case.
 from foo import __version__  # __version__ is a special case.
+from locale import _  # _ is a special case.
 from import_private_name import _top_level_secret  # Can import from self.
 from import_private_name.submodule import _submodule_secret  # Can import from self.
 from import_private_name.submodule.subsubmodule import (
     _subsubmodule_secret,
+)  # Can import from self.
+from import_private_name.sibling_submodule import (
+    _sibling_submodule_secret,
+    _another_sibling_submodule_secret,
+    some_value,
 )  # Can import from self.

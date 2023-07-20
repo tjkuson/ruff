@@ -77,7 +77,7 @@ pub(crate) fn import_private_name(
             ));
         }
         for name in names {
-            if name.name.as_str() == "__version__" {
+            if matches!(name.name.as_str(), "__version__" | "_") {
                 continue;
             }
             if name.name.starts_with('_') {
