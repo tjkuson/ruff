@@ -53,7 +53,7 @@ impl Violation for ImportPrivateName {
             Some(module) => {
                 format!("Private name import `{name}` from external module `{module}`")
             }
-            None => format!("Imported private name `{name}`"),
+            None => format!("Private name import `{name}`"),
         }
     }
 }
