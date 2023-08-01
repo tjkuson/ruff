@@ -76,7 +76,8 @@ pub(crate) fn import_private_name(
             return;
         }
         // Ignore private imports from the same module.
-        // TODO(tjkuson): Make this work with PEP 420 namespace packages.
+        // TODO(tjkuson): Detect namespace packages automatically.
+        // https://github.com/astral-sh/ruff/issues/6114
         if let Some(module_path) = module_path {
             let root_module = module_path.first().unwrap();
             if module.starts_with(root_module) {
