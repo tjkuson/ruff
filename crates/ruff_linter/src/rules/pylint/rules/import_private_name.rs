@@ -51,7 +51,7 @@ impl Violation for ImportPrivateName {
         let ImportPrivateName { name, module } = self;
         match module {
             Some(module) => {
-                format!("Imported private name `{name}` from external module `{module}`")
+                format!("Private name import `{name}` from external module `{module}`")
             }
             None => format!("Imported private name `{name}`"),
         }
