@@ -1,6 +1,6 @@
 use ruff_diagnostics::{Diagnostic, Violation};
 use ruff_macros::{derive_message_formats, violation};
-use rustpython_parser::ast::{Alias, Ranged, Stmt};
+use ruff_python_ast::{Alias, Ranged, Stmt};
 
 use crate::checkers::ast::Checker;
 
@@ -105,9 +105,7 @@ pub(crate) fn import_private_name(
             ));
         }
         for name in names {
-            // It is common to import the package version as `__version__` and
-            // to name translation functions `_`. Ignore these names.
-            if matches!(name.name.as_str(), "__version__" | "_") {
+            if matches!(name.name.as_str(), "_") || name.name.starts_with("__") {
                 continue;
             }
             if name.name.starts_with('_') {
