@@ -72,7 +72,7 @@ pub(crate) fn import_private_name(
         return;
     }
     if let Some(module) = module {
-        if module.starts_with("__future__") || module.starts_with("__main__") {
+        if module.starts_with("__") {
             return;
         }
         // Ignore private imports from the same module.
