@@ -30,7 +30,7 @@ use crate::checkers::ast::Checker;
 /// ```
 ///
 /// ## Options
-/// - [`namespace-packages`]: List of namespace packages that are known to
+/// - [`namespace-packages`]: List of namespace packages that are known to ruff
 ///
 /// ## References
 /// - [PEP 8: Naming Conventions](https://peps.python.org/pep-0008/#naming-conventions)
