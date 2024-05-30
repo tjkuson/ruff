@@ -893,6 +893,17 @@ pub(crate) fn statement(stmt: &Stmt, checker: &mut Checker) {
                             stmt.range(),
                         ));
                     }
+                    if checker.enabled(Rule::BannedImportFrom) {
+                        if let Some(diagnostic) =
+                            flake8_import_conventions::rules::banned_import_from(
+                                stmt,
+                                &helpers::format_import_from(level, module),
+                                &checker.settings.flake8_import_conventions.banned_from,
+                            )
+                        {
+                            checker.diagnostics.push(diagnostic);
+                        }
+                    }
                 } else {
                     if let Some(asname) = &alias.asname {
                         if checker.enabled(Rule::BuiltinVariableShadowing) {
@@ -1014,15 +1025,6 @@ pub(crate) fn statement(stmt: &Stmt, checker: &mut Checker) {
                     module,
                     names,
                     checker.module.qualified_name(),
-                ) {
-                    checker.diagnostics.push(diagnostic);
-                }
-            }
-            if checker.enabled(Rule::BannedImportFrom) {
-                if let Some(diagnostic) = flake8_import_conventions::rules::banned_import_from(
-                    stmt,
-                    &helpers::format_import_from(level, module),
-                    &checker.settings.flake8_import_conventions.banned_from,
                 ) {
                     checker.diagnostics.push(diagnostic);
                 }

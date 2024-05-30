@@ -14,6 +14,7 @@ pub(crate) fn bindings(checker: &mut Checker) {
         Rule::UnaliasedCollectionsAbcSetImport,
         Rule::UnconventionalImportAlias,
         Rule::UnusedVariable,
+        Rule::BannedImportFrom,
     ]) {
         return;
     }
@@ -60,6 +61,15 @@ pub(crate) fn bindings(checker: &mut Checker) {
                 checker,
                 binding,
                 &checker.settings.flake8_import_conventions.aliases,
+            ) {
+                checker.diagnostics.push(diagnostic);
+            }
+        }
+        if checker.enabled(Rule::BannedImportFrom) {
+            if let Some(diagnostic) = flake8_import_conventions::rules::banned_import_from_deferred(
+                checker,
+                binding,
+                &checker.settings.flake8_import_conventions.banned_from,
             ) {
                 checker.diagnostics.push(diagnostic);
             }

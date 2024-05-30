@@ -1,9 +1,12 @@
 use ruff_python_ast::Stmt;
+use ruff_python_semantic::Binding;
 use rustc_hash::FxHashSet;
 
 use ruff_diagnostics::{Diagnostic, Violation};
 use ruff_macros::{derive_message_formats, violation};
 use ruff_text_size::Ranged;
+
+use crate::checkers::ast::Checker;
 
 /// ## What it does
 /// Checks for member imports that should instead be accessed by importing the
@@ -57,6 +60,31 @@ pub(crate) fn banned_import_from(
             },
             stmt.range(),
         ));
+    }
+    None
+}
+
+/// ICN003
+pub(crate) fn banned_import_from_deferred(
+    checker: &Checker,
+    binding: &Binding,
+    banned_conventions: &FxHashSet<String>,
+) -> Option<Diagnostic> {
+    let import = binding.as_any_import()?;
+    let from_import = import.as_from_import()?;
+
+    let qualified_name = from_import.qualified_name.to_string();
+    for banned in banned_conventions {
+        if qualified_name.starts_with(banned) {
+            let range = binding.statement(checker.semantic())?.range();
+            let diagnostic = Diagnostic::new(
+                BannedImportFrom {
+                    name: qualified_name,
+                },
+                range,
+            );
+            return Some(diagnostic);
+        }
     }
     None
 }
