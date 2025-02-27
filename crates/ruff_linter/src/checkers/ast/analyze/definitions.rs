@@ -80,6 +80,7 @@ pub(crate) fn definitions(checker: &mut Checker) {
         Rule::UndocumentedPublicPackage,
     ]);
     let enforce_pydoclint = checker.any_enabled(&[
+        Rule::SignatureDocstringArgumentOrderDiscrepancy,
         Rule::DocstringMissingReturns,
         Rule::DocstringExtraneousReturns,
         Rule::DocstringMissingYields,
@@ -274,6 +275,7 @@ pub(crate) fn definitions(checker: &mut Checker) {
             }
 
             let enforce_sections = checker.any_enabled(&[
+                Rule::SignatureDocstringArgumentOrderDiscrepancy,
                 Rule::MissingBlankLineAfterLastSection,
                 Rule::BlankLinesBetweenHeaderAndContent,
                 Rule::NonCapitalizedSectionName,

@@ -865,6 +865,7 @@ pub(crate) fn check_docstring(
     section_contexts: &SectionContexts,
     convention: Option<Convention>,
 ) {
+    println!("entering check_docstring");
     let mut diagnostics = Vec::new();
 
     // Only check function docstrings.
@@ -898,6 +899,15 @@ pub(crate) fn check_docstring(
         visitor.visit_body(&function_def.body);
         visitor.finish()
     };
+
+    // DOC104
+    println!("checking doc104");
+    if checker.enabled(Rule::SignatureDocstringArgumentOrderDiscrepancy) {
+        println!("trigger");
+        println!("docstring {:#?}", docstring);
+        println!("");
+        println!("docstring_sections {:#?}", &docstring_sections);
+    }
 
     // DOC201
     if checker.enabled(Rule::DocstringMissingReturns) {
